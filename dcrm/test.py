@@ -1,4 +1,5 @@
 import mysql.connector
+#pip uninstall mysql-connector, and pip install mysql-connector-python
 connection = mysql.connector.connect(  
  host='localhost',  
  user='root',  

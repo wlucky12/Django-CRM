@@ -1,5 +1,5 @@
 #Install Mysql on my computer
-#create virtual envirment .virt/(python -m venv [virt name])
+#create virtual envirment .virt/ (python -m venv [virt name])
 #pip install django
 #pip install mysql
 #pip install mysql-connector
