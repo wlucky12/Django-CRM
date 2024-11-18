@@ -3,7 +3,21 @@
 {% block content %}
 <div class=" col-md-6 offset-md-3">
     {% if user.is_authenticated %}
+
+
+
     <h1>Hello {{user.username}}</h1>
+    <br>
+    <h2>custom</h2>
+    {% if customs %}
+        {%for custom in customs%}
+            {{custom}}<br>
+        {%endfor%}
+    
+    
+    {%endif%}
+
+
     {% else %}
     <h1>Login</h1>
     <br>

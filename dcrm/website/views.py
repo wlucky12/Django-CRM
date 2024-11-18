@@ -1,8 +1,14 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
+from .models import Custom
+
 # Create your views here.
 def home(request):
+    customs=Custom.objects.all()
+
+
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -14,7 +20,8 @@ def home(request):
         else:
             messages.success(request,'There was an error logging in, please try again')
             return redirect('home')
-    return render(request,'home.html',{})
+    return render(request,'home.html',{'customs':customs})
+
 
 # def login_user(request):
 #     pass
