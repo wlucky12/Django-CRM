@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        custom record
+    </div>
+    <div class="card-body">
+      <p class="card-text"><strong>Name:</strong>{{ custom.name }}</p>
+      <p class="card-text"><strong>Email:</strong>{{ custom.email }}</p>
+      <p class="card-text"><strong>Phone:</strong>{{ custom.phone_number }}</p>
+      
+      <a href="{% url 'home'%}" class="btn btn-secondary">Back</a>
+      
+      <a href="{% url 'update_record' custom.id %}" class="btn btn-primary">Update record</a>
+      <a href="{% url 'delete_record' custom.id %}" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+{% endblock %}
