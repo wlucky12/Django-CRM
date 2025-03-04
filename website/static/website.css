@@ -1,0 +1,94 @@
+.navbar-nav {
+    display: flex;
+    width: 100%;
+}
+.right-align {
+    margin-left: auto !important;
+    margin-left: 0.2rem;
+}
+
+body {
+    background: linear-gradient(
+      to right,
+      rgb(82, 154, 120, 0.6),
+      rgba(44, 114, 251, 0.6)
+    );
+  }
+.namecard{
+    background-color: #fff;
+    border-color: black;
+    border-width: 2px;
+    border-radius: 10px;
+    padding: 10px;
+    width: 15%;
+    min-width:140px;
+    height: auto;
+    margin-top: 10px;
+}
+#text-display {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;    /* 垂直居中 */
+    font-size: 12px;
+    height: 16px;
+  }
+
+.namecard:hover{
+    box-shadow:#c2c2c2 0px 0px 20px;
+}
+
+
+.img-me{
+    border-color: rgb(62, 164, 237);
+    border-top: 15px;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+
+}
+
+.name{
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;    /* 垂直居中 */
+    width: 100%;
+    height: 30px;          /* 可根据需要调整高度 */
+
+}
+.icon-container{
+  border-top: 1px solid rgba(0, 0, 0, .05) !important;
+  display: flex; /* 使用 flex 布局 */
+  flex-wrap: wrap; /* 允许换行 */
+  gap: 5px; /* 图标之间的间距 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  padding: 5px;
+}
+ .icon-button {
+  display: flex; /* 使用 flex 布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  background-color: lightgray;
+  border-color: black;
+  border-width: 2px;
+  border-radius: 100%;
+  padding: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.icon-button a {
+  display: flex; /* 确保链接也使用 flexbox */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  width: 100%;
+  height: 100%;
+}
+
+.icon-button svg {
+  width: 1em !important; /* 设置 SVG 宽度 */
+  height: 1em !important; /* 设置 SVG 高度 */
+}

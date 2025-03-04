@@ -5,7 +5,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav" >
           {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{%url 'home'%}">Home</a>
@@ -15,23 +15,23 @@
             <a class="nav-link" href="{%url 'add_record'%}">Add record</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{%url 'show_data'%}">Show data</a>
+          </li>
+          <li class="nav-item right-align">
             <a class="nav-link" href="{%url 'logout'%}">Logout</a>
           </li>
           {%else%}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'home'%}">Login</a>
+            <a class="nav-link" href="{% url 'login'%}">Login</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'register'%}">Register</a>
           </li>
-          {% endif %}  
-          <li class="nav-item">
-            <a class="nav-link" href="/admin">Admin</a>
-            </li>
-
         </ul>
-          
-
+          {% endif %}  
+            <a class="nav-link" href="/admin"><img src="../static/images/admin_photo.png" style="height: 20px;"></a>
+            
+        
 
       </div>
     </div>

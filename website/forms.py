@@ -1,15 +1,20 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Custom
+from .models import Customer
 
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(label='',widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Email Address'}))
+    # email = forms.EmailField(label='',widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Email Address'}))
     # name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Name'}))
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		#循环找到所有字段，并给每个字段插件添加css样式
+		for name, field in self.fields.items():
+			field.widget.attrs={'class': 'form-control','placeholder':name}
 
-class Meta:
+	class Meta:
 		model = User
-		fields = ('username', 'email', 'password1', 'password2')
+		fields = ['username', 'email', 'password1', 'password2']
 
 
 def __init__(self, *args, **kwargs):
@@ -34,8 +39,9 @@ def __init__(self, *args, **kwargs):
 class AddRecordForm(forms.ModelForm):
     name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Name", "class":"form-control"}), label="")
     email = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Email", "class":"form-control"}), label="")
-    phone_number = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Phone Number", "class":"form-control"}), label="")
-
+    phone_number = forms.IntegerField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Phone Number", "class":"form-control"}), label="")
+    address = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Address", "class":"form-control"}), label="")
+    
     class Meta:
-        model = Custom
-        fields = ('name', 'email', 'phone_number')
+        model = Customer
+        fields = ['name', 'email', 'phone_number','address']

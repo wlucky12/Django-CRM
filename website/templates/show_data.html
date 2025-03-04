@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="float: right;margin-bottom:20px ;">
+  <form class="d-flex" role="search">
+    <input class="form-control me-2" name='q' value="{{searched}}" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+</div>
+<table class="table table-striped table-hover table-bordered border-primary ">
+    <thead class="table-primary">
+      <tr>
+        <th scope="col">Id</th>  
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Address</th>
+        <th scope="col">Edit</th>
+      </tr>
+    </thead>
+    <tbody> 
+    {% if customers %}
+        {%for customer in customers%}
+        <tr>
+            <td>{{ customer.customer_id }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phone_number }}</td>
+            <td>{{ customer.address }}</td>
+            <td><a class="btn btn-primary"  href="{% url 'customer_record' customer.customer_id %}">编辑</a></td>
+        </tr>
+        {%endfor%}
+    {%endif%}
+    
+  </tbody>
+</table>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link" href="?page={{ priv }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {{page_list}}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ next }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+{% endblock %}
