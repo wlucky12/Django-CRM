@@ -36,7 +36,7 @@ def __init__(self, *args, **kwargs):
 		self.fields['password2'].label = ''
 		self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
 		
-
+#通过继承BootStrapModelForm，实现自动添加css样式
 class AddRecordForm(BootStrapModelForm):
     # name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Name", "class":"form-control"}), label="")
     # email = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Email", "class":"form-control"}), label="")

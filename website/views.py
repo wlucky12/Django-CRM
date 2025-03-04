@@ -23,7 +23,7 @@ def login_user(request):
         else:
             messages.success(request,'There was an error logging in, please try again')
             return redirect('login')
-    return render(request,'login.html',{})
+    return render(request,'login.html')
 
 def logout_user(request):
     logout(request)
@@ -40,6 +40,7 @@ def register_user(request):
             password = form.cleaned_data['password1']
             user = authenticate(username=username,password=password)
             login(request,user)
+            # request.session['info'] ={'username':username,'password':password} 
             messages.success(request,'You have successfully registered')
             return redirect('home')
         else:
@@ -50,21 +51,15 @@ def register_user(request):
         return render(request,'register.html',{'form':form})
 
 def customer_record(request,pk):
-    if request.user.is_authenticated:
-        customer=Customer.objects.get(customer_id=pk)
-        return render(request,'record.html',{'customer':customer})
-    else:
-        messages.success(request,'You must be logged in to view that page')
-        return redirect('home')
+
+    customer=Customer.objects.get(customer_id=pk)
+    return render(request,'record.html',{'customer':customer})
+
     
 def delete_record(request,pk):
-    if request.user.is_authenticated:
         delete_it=Customer.objects.get(id=pk)
         delete_it.delete()
         messages.success(request,'Record deleted successfully')
-        return redirect('home')
-    else:
-        messages.success(request,'You must be logged in to view that page')
         return redirect('home')
     
 # def luhn_check_digit(number):
@@ -92,8 +87,6 @@ def generate_account_number():
     characters = string.ascii_letters + string.digits  # 大小写字母 + 数字
     return ''.join(random.choices(characters, k=12))  # 增加长度至 12 位
 def add_record(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
     if request.method == 'POST':
         form = AddRecordForm(request.POST)
         if form.is_valid():
@@ -122,14 +115,13 @@ def add_record(request):
         form = AddRecordForm()
     return render(request, 'add_record.html', {'form': form})
 def update_record(request,pk):
-    if request.user.is_authenticated:
-        current_record=Customer.objects.get(id=pk)
-        form = AddRecordForm(request.POST or None, instance=current_record)
-        if form.is_valid():
-            form.save()
-            messages.success(request,'Record updated successfully')
-            return redirect('home')
-        return render(request,'update_record.html',{'form':form})
+    current_record=Customer.objects.get(id=pk)
+    form = AddRecordForm(request.POST or None, instance=current_record)
+    if form.is_valid():
+        form.save()
+        messages.success(request,'Record updated successfully')
+        return redirect('home')
+    return render(request,'update_record.html',{'form':form})
 
 def show_data(request): 
     #添加搜索功能
