@@ -161,7 +161,8 @@ def show_data(request):
     for i in range(1,pages+1):
         ele ='<li class="page-item"><a class="page-link" href="?page={}">{}</a></li>'.format(i,i)
         page_list.append(ele)
-
+    #将列表转换成字符串,并标记为安全
+    #问题：当数据过多时页面太多，前端展示效果不佳
     page_list = mark_safe(''.join(page_list) )
 
 
