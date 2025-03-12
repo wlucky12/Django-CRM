@@ -11,7 +11,7 @@
       <p class="card-text"><strong>Email:</strong>{{ customer.email }}</p>
       <p class="card-text"><strong>Phone:</strong>{{ customer.phone_number }}</p>
       <p class="card-text"><strong>Address:</strong>{{ customer.address }}</p>
-      <a href="{% url 'home'%}" class="btn btn-secondary">Back</a>
+      <a href="{% url 'show_data'%}" class="btn btn-secondary">Back</a>
       
       <a href="{% url 'update_record' customer.customer_id %}" class="btn btn-primary">Update record</a>
       <a href="{% url 'delete_record' customer.customer_id %}" class="btn btn-danger">Delete</a>

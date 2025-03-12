@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
-
+{% block js %}
+    <script src="../static/scrolltext.js"></script>
+    <script src="../static/clicknamecard.js"></script>
+{% endblock %}
 {% block content %}
     {% if user.is_authenticated %}
       {% if request.user.username == "lucky" %}

@@ -2,31 +2,29 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1>客户列表</h1>
+    <h1>账户列表</h1>
     <form method="get" class="mb-3">
         <div class="input-group">
-            <input type="text" name="q" class="form-control" placeholder="搜索客户" value="{{ searched }}">
+            <input type="text" name="q" class="form-control" placeholder="搜索账号" value="{{ searched }}">
             <button type="submit" class="btn btn-primary">搜索</button>
         </div>
     </form>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>客户ID</th>
-                <th>姓名</th>
-                <th>邮箱</th>
-                <th>电话</th>
-                <th>地址</th>
+                <th>账号</th>
+                <th>账户类型</th>
+                <th>账户余额</th>
+                <th>客户名字</th>
             </tr>
         </thead>
         <tbody>
-            {% for customer in customers %}
+            {% for account in accounts %}
             <tr>
-                <td>{{ customer.customer_id }}</td>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.email }}</td>
-                <td>{{ customer.phone_number }}</td>
-                <td>{{ customer.address }}</td>
+                <td>{{ account.account_number }}</td>
+                <td>{{ account.account_type }}</td>
+                <td>{{ account.account_balance }}</td>
+                <td>{{ account.customer_name }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -39,4 +37,4 @@
         </ul>
     </nav>
 </div>
-{% endblock %}
+{% endblock %} 

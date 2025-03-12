@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>数据分析</h1>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">账户类型分布</h5>
+                    <div id="accountTypeChart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">交易类型分布</h5>
+                    <div id="transactionTypeChart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">每日交易金额趋势</h5>
+                    <div id="transactionTrendChart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 引入 ECharts -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+<!-- 使用 json_script 标签嵌入数据 -->
+{{ account_type_data|json_script:"accountTypeData" }}
+{{ transaction_type_data|json_script:"transactionTypeData" }}
+{{ transaction_dates|json_script:"transactionDates" }}
+{{ transaction_amounts|json_script:"transactionAmounts" }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 从JSON脚本标签中获取数据
+        var accountTypeData = JSON.parse(document.getElementById('accountTypeData').textContent);
+        var transactionTypeData = JSON.parse(document.getElementById('transactionTypeData').textContent);
+        var transactionDates = JSON.parse(document.getElementById('transactionDates').textContent);
+        var transactionAmounts = JSON.parse(document.getElementById('transactionAmounts').textContent);
+
+        // 账户类型分布图
+        var accountTypeChart = echarts.init(document.getElementById('accountTypeChart'));
+        var accountTypeOption = {
+            title: {
+                text: '账户类型分布',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c} ({d}%)'
+            },
+            series: [{
+                type: 'pie',
+                radius: '70%',
+                data: accountTypeData,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+        accountTypeChart.setOption(accountTypeOption);
+
+        // 交易类型分布图
+        var transactionTypeChart = echarts.init(document.getElementById('transactionTypeChart'));
+        var transactionTypeOption = {
+            title: {
+                text: '交易类型分布',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c} ({d}%)'
+            },
+            series: [{
+                type: 'pie',
+                radius: '70%',
+                data: transactionTypeData,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+        transactionTypeChart.setOption(transactionTypeOption);
+
+        // 交易金额趋势图
+        var transactionTrendChart = echarts.init(document.getElementById('transactionTrendChart'));
+        var transactionTrendOption = {
+            title: {
+                text: '每日交易金额趋势',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                data: transactionDates,
+                axisLabel: {
+                    rotate: 45
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '交易金额'
+            },
+            series: [{
+                data: transactionAmounts,
+                type: 'line',
+                smooth: true,
+                areaStyle: {}
+            }]
+        };
+        transactionTrendChart.setOption(transactionTrendOption);
+
+        // 响应式调整
+        window.addEventListener('resize', function() {
+            accountTypeChart.resize();
+            transactionTypeChart.resize();
+            transactionTrendChart.resize();
+        });
+    });
+</script>
+{% endblock %}

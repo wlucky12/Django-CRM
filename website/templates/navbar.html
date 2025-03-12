@@ -17,9 +17,19 @@
           <li class="nav-item">
             <a class="nav-link" href="{%url 'show_data'%}">Show data</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'analysis'%}">Analysis</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'transactions'%}">Transactions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'show_accounts'%}">Accounts</a>
+          </li>
           <li class="nav-item right-align">
             <a class="nav-link" href="{%url 'logout'%}">Logout</a>
           </li>
+            <a class="nav-link" href="/admin"><img id="admin-img" src="../static/images/lucy.png" style="height: 20px;"></a>
           {%else%}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'login'%}">Login</a>
@@ -28,8 +38,9 @@
             <a class="nav-link" href="{% url 'register'%}">Register</a>
           </li>
         </ul>
+        <a class="nav-link" href="/admin"><img src="../static/images/admin_photo.png" style="height: 20px;"></a>
           {% endif %}  
-            <a class="nav-link" href="/admin"><img src="../static/images/admin_photo.png" style="height: 20px;"></a>
+            
             
         
 

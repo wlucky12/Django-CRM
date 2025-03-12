@@ -4,9 +4,13 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from .models import Customer,Account,Transaction
-from .forms import SignUpForm,AddRecordForm
+from .forms import SignUpForm,AddRecordForm,TransactionForm
 from django.db import IntegrityError,transaction
 from django.utils.safestring import mark_safe
+from django.db.models import Count, Sum
+from django.db.models.functions import TruncDate
+from .utils.pagination import Pagination
+import json
 # Create your views here.
 def home(request):
     return render(request,'home.html',{})
@@ -123,45 +127,121 @@ def update_record(request,pk):
         return redirect('home')
     return render(request,'update_record.html',{'form':form})
 
-def show_data(request): 
-    #添加搜索功能
-    data_dict={}
-    searched = request.GET.get('q',"")
+def show_data(request):
+    # 添加搜索功能
+    data_dict = {}
+    searched = request.GET.get('q', "")
     if searched:
         data_dict['name__contains'] = searched
 
-    #添加分页功能  
-    page= int(request.GET.get('page',1))
+    # 获取客户数据
+    customers = Customer.objects.filter(**data_dict)
+
+    # 使用分页工具类
+    pagination = Pagination(request, customers)
+    paginated_customers = pagination.get_paginated_queryset()
+    page_info = pagination.get_page_info()
+
+    context = {
+        'customers': paginated_customers,
+        'searched': searched,
+        'page_list': page_info['page_list'],
+        'prev_page': page_info['prev_page'],
+        'next_page': page_info['next_page'],
+    }
+    return render(request, 'show_data.html', context)
+
+def analysis(request):
+    # 账户类型分布
+    account_type_data = Account.objects.values('account_type').annotate(count=Count('id'))
+    account_type_list = [{'value': item['count'], 'name': '活期' if item['account_type'] == 1 else '定期'} 
+                        for item in account_type_data]
     
+    # 交易类型分布
+    transaction_type_data = Transaction.objects.values('transaction_type').annotate(count=Count('id'))
+    transaction_type_list = [{'value': item['count'], 'name': item['transaction_type']} 
+                            for item in transaction_type_data]
     
-    start=(page-1)* 10
-    end=page * 10
-    customers=Customer.objects.filter(**data_dict)[start:end]
-
-    #获取数据量并生成页面数量返回前端
-    pages=Customer.objects.filter(**data_dict).count()
-    if pages % 10 == 0:
-        pages = pages // 10
-    else:
-        pages = pages // 10 + 1
+    # 每日交易金额趋势
+    daily_transactions = Transaction.objects.annotate(
+        transaction_date=TruncDate('date')
+    ).values('transaction_date').annotate(
+        total_amount=Sum('amount')
+    ).order_by('transaction_date')
     
-    #上一页
-    priv=max(1,page-1)
-    #下一页
-    next=min(pages,page+1)
-    page_list=[]
-    for i in range(1,pages+1):
-        ele ='<li class="page-item"><a class="page-link" href="?page={}">{}</a></li>'.format(i,i)
-        page_list.append(ele)
-    #将列表转换成字符串,并标记为安全
-    #问题：当数据过多时页面太多，前端展示效果不佳
-    page_list = mark_safe(''.join(page_list) )
-
-
-    #改进：能否通过异步请求拿到数据
-    return render(request,'show_data.html',{'customers':customers,'searched':searched,'page_list':page_list,'priv':priv,'next':next})
-
+    dates = []
+    amounts = []
+    for item in daily_transactions:
+        dates.append(item['transaction_date'].strftime('%Y-%m-%d'))
+        amounts.append(float(item['total_amount']))  # 将 Decimal 转换为 float
+    
+    context = {
+        'account_type_data': json.dumps(account_type_list),
+        'transaction_type_data': json.dumps(transaction_type_list),
+        'transaction_dates': json.dumps(dates),
+        'transaction_amounts': json.dumps(amounts),
+    }
+    return render(request, 'analysis.html', context)
 
 
 def transactions(request):
-    pass
+    if request.method == 'POST':
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            transaction = form.save(commit=False)
+            account = transaction.account
+            target_account = transaction.target_account
+            amount = transaction.amount
+
+            if transaction.transaction_type == 'deposit':
+                account.account_balance += amount
+            elif transaction.transaction_type == 'withdrawal':
+                account.account_balance -= amount
+            elif transaction.transaction_type == 'transfer':
+                account.account_balance -= amount
+                target_account.account_balance += amount
+                target_account.save()
+
+            account.save()
+            transaction.save()
+            messages.success(request, '交易创建成功！')
+            return redirect('account')
+    else:
+        form = TransactionForm()
+    return render(request, 'transactions.html', {'form': form})
+
+def show_accounts(request):
+    # 添加搜索功能
+    data_dict = {}
+    searched = request.GET.get('q', "")
+    if searched:
+        data_dict['account_number__contains'] = searched
+
+    # 获取账户数据
+    accounts = Account.objects.filter(**data_dict)
+
+    # 使用分页工具类
+    pagination = Pagination(request, accounts)
+    paginated_accounts = pagination.get_paginated_queryset()
+    page_info = pagination.get_page_info()
+
+    # 准备账户数据
+    account_list = []
+    for account in paginated_accounts:
+        account_list.append({
+            'account_number': account.account_number,
+            'account_type': account.get_account_type_display(),
+            'account_balance': account.account_balance,
+            'customer_name': account.get_customer_name(),
+        })
+
+    context = {
+        'accounts': account_list,
+        'searched': searched,
+        'page_list': page_info['page_list'],
+        'prev_page': page_info['prev_page'],
+        'next_page': page_info['next_page'],
+    }
+    return render(request, 'accounts.html', context)
+
+    

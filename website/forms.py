@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .utils.bootstrap import BootStrapModelForm
-from .models import Customer
+from .models import Customer, Transaction, Account
 
 class SignUpForm(UserCreationForm):
     # email = forms.EmailField(label='',widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Email Address'}))
@@ -46,3 +46,35 @@ class AddRecordForm(BootStrapModelForm):
     class Meta:
         model = Customer
         fields = ['name', 'email', 'phone_number','address']
+
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ['transaction_type', 'account', 'target_account', 'amount', 'date', 'description']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['account'].queryset = Account.objects.all()
+        self.fields['target_account'].queryset = Account.objects.all()
+        self.fields['target_account'].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        transaction_type = cleaned_data.get('transaction_type')
+        account = cleaned_data.get('account')
+        target_account = cleaned_data.get('target_account')
+        amount = cleaned_data.get('amount')
+
+        if transaction_type == 'transfer' and not target_account:
+            raise forms.ValidationError("转账交易必须指定目标账户。")
+
+        if account and amount:
+            if transaction_type == 'withdrawal' and account.account_balance < amount:
+                raise forms.ValidationError("账户余额不足。")
+            if transaction_type == 'transfer' and account.account_balance < amount:
+                raise forms.ValidationError("账户余额不足，无法完成转账。")
+
+        return cleaned_data

@@ -1,4 +1,3 @@
-
 from django.urls import path
 from. import views
 
@@ -13,7 +12,7 @@ urlpatterns = [
     path('add_record/', views.add_record, name='add_record'),
     path('update/<int:pk>', views.update_record, name='update_record'),
     path('show_data/',views.show_data,name='show_data'),
+    path('analysis',views.analysis,name='analysis'),
     path('transactions',views.transactions,name='transactions'),
-
-
+    path('accounts/', views.show_accounts, name='show_accounts'),
 ]
