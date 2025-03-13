@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-4">
@@ -35,8 +36,8 @@
     </div>
 </div>
 
-<!-- 引入 ECharts -->
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<!-- 引入本地 ECharts -->
+<script src="{% static 'echarts/echarts.min.js' %}"></script>
 
 <!-- 使用 json_script 标签嵌入数据 -->
 {{ account_type_data|json_script:"accountTypeData" }}

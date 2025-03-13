@@ -7,7 +7,54 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
         <button type="submit" class="btn btn-primary">提交</button>
     </form>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const transactionTypeField = document.querySelector('#id_transaction_type');
+        const targetAccountField = document.querySelector('#id_target_account').parentElement;
+        const accountField = document.querySelector('#id_account');
+        const errorMessage = document.querySelector('#errorMessage');
+        const form = document.querySelector('#transactionForm');
+
+        function toggleTargetAccountField() {
+            if (transactionTypeField.value === 'transfer') {
+                targetAccountField.style.display = 'block';
+            } else {
+                targetAccountField.style.display = 'none';
+            }
+        }
+
+        // 检查账户类型
+        function checkAccountType() {
+            const accountId = accountField.value;
+            if (!accountId) return;
+
+            fetch(`/check_account_type/${accountId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.account_type === 2) {  // 定期账户
+                        errorMessage.textContent = '定期账户不支持此交易类型。';
+                        errorMessage.style.display = 'block';
+                        form.querySelector('button[type="submit"]').disabled = true;
+                    } else {
+                        errorMessage.style.display = 'none';
+                        form.querySelector('button[type="submit"]').disabled = false;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // 初始加载时检查
+        toggleTargetAccountField();
+        checkAccountType();
+
+        // 监听交易类型变化
+        transactionTypeField.addEventListener('change', toggleTargetAccountField);
+        // 监听账户选择变化
+        accountField.addEventListener('change', checkAccountType);
+    });
+</script>
 {% endblock %}

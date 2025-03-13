@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>交易列表</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>交易类型</th>
+                <th>账户</th>
+                <th>目标账户</th>
+                <th>金额</th>
+                <th>日期</th>
+                <th>描述</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.get_transaction_type_display }}</td>
+                <td>{{ transaction.account.account_number }} - {{ transaction.account.get_customer_name }}</td>
+                <td>
+                    {% if transaction.target_account %}
+                        {{ transaction.target_account.account_number }} - {{ transaction.target_account.get_customer_name }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ transaction.amount }}</td>
+                <td>{{ transaction.date }}</td>
+                <td>{{ transaction.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 

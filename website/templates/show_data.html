@@ -17,6 +17,7 @@
                 <th>邮箱</th>
                 <th>电话</th>
                 <th>地址</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,11 @@
                 <td>{{ customer.email }}</td>
                 <td>{{ customer.phone_number }}</td>
                 <td>{{ customer.address }}</td>
+                <td>
+                    <a href="{% url 'customer_record' customer.customer_id %}" class="btn btn-primary">查看</a>
+                    <a href="{% url 'update_record' customer.customer_id %}" class="btn btn-primary">更新</a>
+                    <a href="{% url 'delete_record' customer.customer_id %}" class="btn btn-danger">删除</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

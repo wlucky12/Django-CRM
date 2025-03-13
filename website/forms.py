@@ -61,6 +61,10 @@ class TransactionForm(forms.ModelForm):
         self.fields['target_account'].queryset = Account.objects.all()
         self.fields['target_account'].required = False
 
+        # 为账户字段添加客户名
+        self.fields['account'].label_from_instance = lambda obj: f"{obj.account_number} - {obj.get_customer_name()}"
+        self.fields['target_account'].label_from_instance = lambda obj: f"{obj.account_number} - {obj.get_customer_name()}"
+
     def clean(self):
         cleaned_data = super().clean()
         transaction_type = cleaned_data.get('transaction_type')

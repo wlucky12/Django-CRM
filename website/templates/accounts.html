@@ -12,19 +12,20 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>客户名字</th>
                 <th>账号</th>
                 <th>账户类型</th>
                 <th>账户余额</th>
-                <th>客户名字</th>
+                
             </tr>
         </thead>
         <tbody>
             {% for account in accounts %}
             <tr>
+                <td>{{ account.customer_name }}</td>
                 <td>{{ account.account_number }}</td>
                 <td>{{ account.account_type }}</td>
-                <td>{{ account.account_balance }}</td>
-                <td>{{ account.customer_name }}</td>
+                <td>{{ account.account_balance }}</td>     
             </tr>
             {% endfor %}
         </tbody>
