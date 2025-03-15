@@ -1,17 +1,4 @@
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # 如果有全局模板目录
-        'APP_DIRS': True,  # 自动查找每个应用的templates目录
-        'OPTIONS': {
-            'context_processors': [
-                # ... 其他配置
-            ],
-        },
-    },
-]
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+INSTALLED_APPS = [
+    # ... 其他应用 ...
+    'website',  # 确保 website 应用已安装
 ] 

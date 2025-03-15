@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .views import luhn_check_digit
+from .views.views import luhn_check_digit
 # Create your tests here.
 # 测试Luhn算法
 def test_luhn_check_digit():

@@ -9,6 +9,7 @@ class Customer(models.Model):
     email=models.EmailField(max_length=100,verbose_name="邮箱")
     phone_number=models.CharField(max_length=50,verbose_name="电话号码")
     address=models.TextField(max_length=100,verbose_name="地址")
+    password=models.CharField(max_length=128,verbose_name="密码")
 
     def __str__(self):
         return(f"{self.name}")

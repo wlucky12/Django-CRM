@@ -4,8 +4,15 @@ from .views.show_data import show_data
 from .views.accounts import show_accounts
 from .views.transactions import transactions,check_account_type, transaction_list
 from .views.analysis import analysis
+from rest_framework.routers import DefaultRouter
+from .views import apiviews
 
+# router = DefaultRouter()
+# router.register('customers', apiviews.CustomerViewSet)
+# router.register('accounts', apiviews.AccountViewSet)
+# router.register('transactions', apiviews.TransactionViewSet)
 
+# urlpatterns = router.urls
 
 urlpatterns = [
     path('', views.home, name='home'),  
@@ -21,6 +28,6 @@ urlpatterns = [
     path('transactions',transactions,name='transactions'),
     path('accounts/', show_accounts, name='show_accounts'),
     path('check_account_type/<int:account_id>/', check_account_type, name='check_account_type'),
-    path('transactions/', transaction_list, name='transaction_list'),
+    path('transactions/list', transaction_list, name='transaction_list'),
     # path('add_message/<str:message>/<str:level>/', views.add_message, name='add_message'),
 ]

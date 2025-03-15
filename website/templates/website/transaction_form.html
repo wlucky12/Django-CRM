@@ -40,8 +40,8 @@
                         errorMessage.textContent = '定期账户不支持此交易类型。';
                         errorMessage.style.display = 'block';
 
-                        // 使用Django的messages显示错误信息
-                        fetch(`/add_message/定期账户不支持此交易类型。/error/`)
+                        // 使用Django的messages显示错误信息,好像是因为要更新页面才能显示，所以暂时不用，使用监听达到异步请求效果
+                        // fetch(`/add_message/定期账户不支持此交易类型。/error/`)
                         
 
         
