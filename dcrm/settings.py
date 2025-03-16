@@ -42,7 +42,18 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+CORS_ALLOW_CREDENTIALS = True  # 允许跨域请求携带凭证
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # 允许前端域名
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",  # 允许前端域名登录注销
+]
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',#跨域中间件modelviewset
+    'django.middleware.common.CommonMiddleware',#通用中间件viewset
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,11 +61,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',#跨域中间件modelviewset
-    'django.middleware.common.CommonMiddleware',#通用中间件viewset
+    
     # 'website.middleware.auth.AuthMiddleware',
 ]
-CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'dcrm.urls'
 
